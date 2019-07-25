@@ -1,0 +1,68 @@
+%  LaTeX template for abstract submission for MCM 2019
+% 
+%  If this paper is for a special (invited) session, put the name of session organizer 
+%  (first name, family name), and the session title.
+%  For plenary talks, put ``Plenary Talk'' for the session title, and Zdravko Botev for the organizer.
+%
+\insession{Peter}{Kritzer}{Current Challenges in High-Dimensional Algorithms}
+
+% First name and name of the speaker.
+\speaker{Fred J.}{Hickernell}%
+%  (put no space here)
+% Title of the talk, capitalized.
+\title{An Optimal Adaptive Algorithm Based on a Pilot Sample}
+
+% For each author, give the first name, family name, affiliation, and email.
+% Ideally, the affiliation and email should fit on a single line.  
+% No need to put the full snail mailing address.  
+\author{Yuhan}{Ding}{Misericordia University, USA}{yding@misericordia.edu}
+\author{Fred J.}{Hickernell}{Illinois Institute of Technology, USA}{hickernell@iit.edu}
+\author{Peter}{Kritzer}{Austrian Academy of Sciences, Austria}{peter.kritzer@oeaw.ac.at}
+\author{Simon}{Mak}{Georgia Institute of Technology, USA}{smak6@gatech.edu}
+
+
+% Type your abstract here.
+\abstract{Adaptive algorithms are convenient for the practitioner because they automatically determine the computational effort required to satisfy the error criterion.  The function data acquired for constructing the approximate solution are also used to compute a data-based error bound for the approximate solution.  Computation proceeds until this error bound becomes small enough.  If the set of allowed input functions is convex, adaptive algorithms may offer no advantage to non-adaptive algorithms.  We construct an adaptive algorithm for solving a general, linear problem where the input functions lie in a  \emph{non-convex cone}. The stopping criterion is based on theory, not heuristics.  The cone of input functions is defined so that sampling the most important Fourier series coefficients is sufficient to bound the magnitude of the unsampled Fourier coefficients.  We show that our adaptive algorithm is optimal.  We also determine conditions under which the problem is tractable.  This work is related to  the adaptive algorithms developed in \cite{HicEtal14a,HicEtal17a,KunEtal19a}.
+	
+	
+%  If you have refererences, put them here in a format like below. 
+%  This can be obtained using BiBTeX with the bib style plain.bst. 
+%  Note that this must be placed inside the abstract.
+%\begin{thebibliography}{1}
+%
+%\bibitem{kroese2011handbook}
+%D. P. Kroese, T. Taimre, and Z. I. Botev.
+%\newblock {\em Handbook of Monte Carlo methods}.
+%\newblock John Wiley \& Sons, 2011.
+%
+%
+%\bibitem{owen2018monte}
+%A. B. Owen  and P. W. Glynn.
+\begin{thebibliography}{1}
+	
+	\bibitem{HicEtal14a}
+	F.~J. Hickernell, L.~Jiang, Y.~Liu, and A.~B. Owen.
+	\newblock Guaranteed conservative fixed width confidence intervals via {M}onte
+	{C}arlo sampling.
+	\newblock In J.~Dick, F.~Y. Kuo, G.~W. Peters, and I.~H. Sloan, editors, {\em
+		{M}onte {C}arlo and Quasi-{M}onte {C}arlo Methods 2012}, volume~65 of {\em
+		Springer Proceedings in Mathematics and Statistics}, pages 105--128.
+	Springer-Verlag, Berlin, 2013.
+	
+	\bibitem{HicEtal17a}
+	F.~J. Hickernell, {\relax Ll}.~A. {Jim\'enez Rugama}, and D.~Li.
+	\newblock Adaptive quasi-{M}onte {C}arlo methods for cubature.
+	\newblock In J.~Dick, F.~Y. Kuo, and H.~Wo\'zniakowski, editors, {\em
+		Contemporary Computational Mathematics --- a celebration of the 80th birthday
+		of {I}an {S}loan}, pages 597--619. Springer-Verlag, 2018.
+	
+	\bibitem{KunEtal19a}
+	R.~J. Kunsch, E.~Novak, and D.~Rudolf.
+	\newblock Solvable integration problems and optimal sample size selection.
+	\newblock {\em Journal of Complexity}, 2019.
+	\newblock To appear.
+	
+\end{thebibliography}
+}  % End of abstract.
+
+
