@@ -11,6 +11,7 @@
 	xspace,
 	calc,
 	colortbl,
+	scrextend,
  	graphicx}
 \usepackage[usenames]{xcolor}
 \usepackage[giveninits=false,backend=biber,style=nature, maxcitenames =10, mincitenames=9]{biblatex}
@@ -25,10 +26,15 @@
 \setlength{\parskip}{2ex}
 \setlength{\arraycolsep}{0.5ex}
 
+\newcommand{\contradiction}{%
+  \ensuremath{{\Longrightarrow\mspace{-2mu}\Longleftarrow}}%
+}
+
 \DeclareMathOperator{\sol}{SOL}
 \DeclareMathOperator{\app}{APP}
 \DeclareMathOperator{\alg}{ALG}
 \DeclareMathOperator{\ERR}{ERR}
+\DeclareMathOperator{\COST}{COST}
 \newcommand{\dataN}{\bigl(\hf(\vk_i)\bigr)_{i=1}^n}
 \newcommand{\dataNj}{\bigl(\hf(\vk_i)\bigr)_{i=1}^{n_j}}
 \newcommand{\dataNjd}{\bigl(\hf(\vk_i)\bigr)_{i=1}^{n_{j^\dagger}}}
@@ -61,7 +67,7 @@ Function approximation is relatively simple compared to many other continuous nu
 	\href{mailto:hickernell@iit.edu}{\url{hickernell@iit.edu}} \quad
 	\href{http://mypages.iit.edu/~hickernell}{\url{mypages.iit.edu/~hickernell}}}
 
-\thanksnote{{\large Joint work with Yuhan Ding, Peter Kritzer, and Simon Mak} \\
+\thanksnote{Joint work with Yuhan Ding, Peter Kritzer, and Simon Mak \\
 	This work partially supported by  NSF-DMS-1522687 and NSF-DMS-1638521 (SAMSI)
 }
 \event{Los Alamos National Laboratory}
@@ -98,19 +104,176 @@ Function approximation is relatively simple compared to many other continuous nu
 \everymath{\displaystyle}
 \frame{\titlepage}
 
-\section{Introduction}
+\section{Problem}
+
+\begin{frame}{Problem}
+
+\vspace{-5ex}
+
+\begin{description}[]
+    \item[Input]\mbox{ }
+    \begin{labeling}{Error Tolerance}
+       \item[\alert<1>{Black box}] providing \only<1>{\alert{noisy} or }\alert{noiseless} information about $f:\Omega \subseteq \reals^d \to \reals$
+    \only<1-2>{ \\ e.g., function values, series coefficients, or linear functionals,} \alert{costing} $\$(f)$ each
+       \only<3->{\\ \alert<3>{$f \in \cf$, definition of $\norm[\cf]{\cdot}$ enshrines smoothness assumptions}}
+        
+        \item[\alert<1>{Error tolerance}] $\varepsilon$
+     
+    \end{labeling}
+    
+    \item[Output]  $\alg(f,\varepsilon)$ \only<1>{(as a surrogate, for solving PDEs, for uncertainty quantification) }that is
+    \begin{labeling}{Accurate}
+        \item[\alert<1>{Cheap}] to evaluate
+        
+        \item[\alert<1>{Accurate}] $\norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon$ \uncover<4->{\quad \alert<4>{$\forall f \in \ch \subset \cf$}}
+        
+        \item[\alert<1>{Efficient}] to construct\uncover<5->{, \alert{$\COST(f,\varepsilon) = \Order( \varepsilon^{-p} R^p d^q)$ for $\norm[\cf]{f} \le R$ and optimal $p$ and $q$}}
+
+    \end{labeling}
+
+	\item<2->[Approximation] with fixed computation budget: $\app(f,n) = \sum_{i=1}^n L_i(f) g_{i,n}$
+	\begin{itemize}
+	    \item $L_1(f), L_2(f), \ldots$ is input function information% 
+	    \only<2>{, e.g., function values or series coefficients}
+	    \item $\vg_n = (g_{1,n}, \ldots, g_{n,n}) \in \cg^n$
+	    \item $ \alert{\COST(f,n)} = \Order(n \$(f) + \COST( \vg_n))$
+	\end{itemize}
+	
+	\item<2->[Algorithm] $\alg(f,\varepsilon) = \app(f,n^*(f,\varepsilon))$ satisfying  
+	$\norm[\cg]{f -  \app(f,n^*(f,\varepsilon))} \le \varepsilon$ \uncover<4->{\quad \alert<4>{$\forall f \in \ch \subset \cf$}}
+		\begin{itemize}
+	    \item $ \alert{\COST(f,\varepsilon)} = \COST(f,n^*(f,\varepsilon)) + \text{ cost to determine } n^*(f,\varepsilon)$
+	\end{itemize}
+
+
+\end{description}
+
+\end{frame}
+
+\section{Solvability}
+
+\begin{frame}{Impossible for All $f$ in Infinite Dimensional $\cf$}
+\vspace{-5ex}
+\[
+\norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon \quad \forall f \in \ch \alert{\subset} \cf
+\]
+\alert{Proof by contradiction}
+
+\vspace{-3ex}
+\begin{itemize}
+    \item Suppose $\ch = \cf$
+    
+    \item Fix $\varepsilon > 0$
+    
+    \item Let $L_1, \ldots, L_n$ be the information used to construct $\alg(0,\varepsilon)$
+    
+    \item Choose \alert{nonzero fooling function} $f \in \cf$, such that $L_1(f) = \cdots = L_n(f) = 0$
+    
+    \item $\alg(\pm cf,\varepsilon) = 0$ for all $c > 0$
+    
+    \item For all $c > 0$
+    \begin{align*}
+        \varepsilon & \ge \max\bigl(\norm[\cg]{cf - \alg(cf,\varepsilon)}, \norm[\cg]{-cf - \alg(cf,\varepsilon)} \bigr) \\
+        & \ge \frac 12 \bigl(\norm[\cg]{cf - \alg(cf,\varepsilon)} + \norm[\cg]{cf + \alg(cf,\varepsilon)} \bigr) \\
+        & \ge  c \norm[\cg]{f} \qquad \contradiction
+    \end{align*}
+    
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Smoothness Helps}
+For $d = 1$, let $u_1, u_2, \ldots$ be linearly independent (polynomials) 
+\begin{gather*}
+    \cf := \left \{ f = \sum_{i=1}^n \hf(i) u_i  : \norm[\cf]{f} : = \norm[2]{\left(\frac{\hf(i)}{\lambda_i} \right)_{i=1}^\infty } < \infty \right \}, \qquad \lambda_1 \ge  \lambda_2 \ge \cdots > 0 \\
+   \cg := \left \{ g = \sum_{i=1}^n \hg(i) u_i  : \norm[\cg]{g} : = \norm[2]{\bigl(\hg(i) \bigr)_{i=1}^\infty } < \infty \right \}, \qquad \app(f,n) = \sum_{i=1}^n L_i(f) g_{i,n}
+\end{gather*}
+
+    
+\end{frame}
+
+\begin{frame}{Legendre and Chebyshev Bases for Function Approximation}
+\vspace{-3ex}
+	\begin{tabular}{>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}}
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_0_1D.png}  &
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_1_1D.png}  &
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_2_1D.png}  &
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_3_1D.png}  &
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_4_1D.png} 
+	\tabularnewline[-7ex]
+	Legendre
+	\tabularnewline
+	\tabularnewline
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_1_1.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_1_2.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_1_3.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_2_2.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_2_3.png} 
+\tabularnewline[0ex]
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_0.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_1.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_2.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_3.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_4.png} 
+\tabularnewline[-7ex]
+Chebyshev \tabularnewline
+\tabularnewline
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_1_1.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_1_2.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_1_3.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_2_2.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_2_3.png} 
+	\end{tabular}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
 
 \begin{frame}{Context}
 
 \vspace{-5ex}
 
 \begin{itemize}
-	\item Linear \alert{solution} operator $\sol : \cf \to \cg$, input space $\cf$ contains functions defined on $\Omega \subseteq \reals^d$ \\
-	\qquad e.g., $\sol(f) = f$, \quad $- \nabla^2 \sol(f) = f,   \sol(f) = 0$  on boundary
-	\item \alert{Approximation} $\app(f,n) = \sum_{i=1}^n L_i(f) g_i$ \\
-	\qquad $\norm[\cg]{\sol(f) - \app(f,n)} \le \norm[\cf \to \cg]{\sol - \app(\cdot,n)} \norm[\cf]{f}$
-	\item \alert{Algorithm} $\alg(f,\varepsilon) = \app(f,n^*(f,\varepsilon))$ satisfying  
-	$\norm[\cg]{\sol(f) - \alg(f,\varepsilon)} \le \varepsilon$
+    \item Given 
+    \begin{description}[labelwidth = 8ex]
+       \item[Black box] providing \only<1>{\alert{noisy} or }\alert{noiseless} information about $f$ \\
+        e.g., function values, series coefficients, or linear functionals, \alert{costing} $\$(f)$ each
+        
+        \item[Error tolerance] $\varepsilon$
+     
+    \end{description}
+    
+    \item Want function $\alg(f,\varepsilon)$ \only<1>{(as a surrogate, for solving PDEs, for uncertainty quantification)} that is
+    \begin{description}
+        \item[Cheap] to evaluate
+        
+        \item[Accurate] $\norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon$
+        
+        \item[Efficient] to construct
+
+    \end{description}
+
+	\item<2-> Fixed computation budget \alert{approximation} $\app(f,n) = \sum_{i=1}^n L_i(f) g_{i,n}$
+	\begin{itemize}
+	    \item $L_1(f), L_2(f), \ldots$ is input function information 
+	    \item $\vg_n = (g_{1,n}, \ldots, g_{n,n}) \in \cg^n$
+	    \item $ \alert{\COST(f,n)} = \Order(n \$(f) + \COST( \vg_n))$
+	\end{itemize}
+	
+	\item<2-> \alert{Algorithm} $\alg(f,\varepsilon) = \app(f,n^*(f,\varepsilon))$ satisfying  
+	$\norm[\cg]{f -  \app(f,n^*(f,\varepsilon))} \le \varepsilon$
+		\begin{itemize}
+	    \item $ \alert{\COST(f,\varepsilon)} = \COST(f,n^*(f,\varepsilon)) + \text{ cost to determine } n^*(f,\varepsilon)$
+	\end{itemize}
+
 
 \uncover<2->{\item \alert{Solvability:} what assumptions on $f$ to determine $n^*(f,\varepsilon) \in \naturals$ \alert{correctly}?  
 	\only<3->{\smallscoop\only<4->{\hspace{-6ex}\raisebox{-1.5ex}{\color{red}\fontsize{40}{48}\selectfont $\times$}} or \smallcone}
@@ -161,9 +324,9 @@ $\displaystyle \frac 1\rho + \frac 1 {\rho'} = \frac 1 \tau $\\[1ex]
     \only<3->{\\[-1ex]
 	\alert{A(f,\varepsilon)} & \alert{= \Sapp(f,n_k)} \text{ for the smallest $k$ satisfying } \alert{\sigma_k(f) \le \frac{\varepsilon \sqrt{1 - b^2}}{ab}}
 	\\ 
-		\MoveEqLeft{\alert{\cost(A,\cc,\varepsilon,\rho) = n_{\ell^\dagger}}, \quad 
+		\MoveEqLeft{\alert{\COST(A,\cc,\varepsilon,\rho) = n_{\ell^\dagger}}, \quad 
 			\ell^\dagger \le \min \left \{\ell \in \naturals : \frac{\rho^2}{\varepsilon^2} \le \frac{(1 - b^2)}{a^2b^2} \left[ \sum_{k=1}^{\ell-1} \frac{b^{2(k-\ell)}}{a^2\lambda_{n_{k-1}+1}^2} + \frac{1}{\lambda_{n_{\ell-1}+1}^2}\right]   \right\}} \\
-		\MoveEqLeft{\cost(A,\cc,\varepsilon,\rho) \text{ \alert{essentially no worse than} } \comp(\ca(\cc,\LambdaAll),\varepsilon,\rho)}\\
+		\MoveEqLeft{\COST(A,\cc,\varepsilon,\rho) \text{ \alert{essentially no worse than} } \comp(\ca(\cc,\LambdaAll),\varepsilon,\rho)}\\
 		\MoveEqLeft{\text{\alert{No} tractability results}}}
 	\end{align*}
 	
@@ -237,18 +400,18 @@ where $\app(f,\varepsilon)$ depends on \alert{function values}, $\LambdaStd$, \a
 
 \smallskip
 
-\uncover<2->{\alert{Cost}: $\cost(\app,f,\varepsilon) = $ \# of function data
+\uncover<2->{\alert{Cost}: $\COST(\app,f,\varepsilon) = $ \# of function data
 \newline
- $\cost(\app,\cc,\varepsilon, \rho) = \max_{f \in \cc \cap \cb_{\rho}} \cost(\app,f,\varepsilon)$
+ $\COST(\app,\cc,\varepsilon, \rho) = \max_{f \in \cc \cap \cb_{\rho}} \COST(\app,f,\varepsilon)$
  \newline
  $\cb_{\rho} := \{f \in \cf : \norm[\cf]{f} \le \rho \}$
  
  \smallskip
 
 \alert{Complexity}\footfullcite{TraWasWoz88}: $\comp(\ca(\cc,\Lambda),\varepsilon,\rho)$ 
-\newline \phantom{a} \hfill \hfill $= \min_{\app \in \ca(\cc,\Lambda)} \cost(\app,\cc,\varepsilon, \rho)$
+\newline \phantom{a} \hfill \hfill $= \min_{\app \in \ca(\cc,\Lambda)} \COST(\app,\cc,\varepsilon, \rho)$
 
-\alert{Optimality}:  \newline \phantom{a} \hfill \hfill $\cost(\app,\cc,\varepsilon, \rho) \le \comp(\ca(\cc,\Lambda),\alert{\omega} \varepsilon,\rho)$}
+\alert{Optimality}:  \newline \phantom{a} \hfill \hfill $\COST(\app,\cc,\varepsilon, \rho) \le \comp(\ca(\cc,\Lambda),\alert{\omega} \varepsilon,\rho)$}
 
 \smallskip
 
@@ -521,7 +684,7 @@ n_0 & = 0, \quad n_k = 2^{k-1}, \ k \in \naturals, \qquad \vj \text{ ordered}, \
 \end{align*}
 
 \vspace{-4ex}
-\alert{Have} $\cost(f,A,\varepsilon)$; \quad \alert{No} $\cost(A,\cc,\varepsilon,\rho)$,  $\comp(\ca(\cc,\LambdaStd),\varepsilon,\rho)$, or  tractability results \alert{yet}
+\alert{Have} $\COST(f,A,\varepsilon)$; \quad \alert{No} $\COST(A,\cc,\varepsilon,\rho)$,  $\comp(\ca(\cc,\LambdaStd),\varepsilon,\rho)$, or  tractability results \alert{yet}
 
 \end{frame}
 
@@ -607,9 +770,9 @@ jT/d, \\
  	 \Sapp(f,n_k) &= \sum_{i=1}^{n_k} \hf(\vk_i) v_{\vk_i} \text{ is optimal for fixed }n_k, \qquad \norm[\cg]{S(f) - \Sapp(f,n_k)} \le \frac{ab \sigma_k(f)}{\sqrt{1 - b^2}} \\[-1ex]
  	 \alert{A(f,\varepsilon)} & \alert{= \Sapp(f,n_k)} \text{ for the smallest $k$ satisfying } \alert{\sigma_k(f) \le \frac{\varepsilon \sqrt{1 - b^2}}{ab}}
  	 \only<2>{\\ 
- 	 \MoveEqLeft{\alert{\cost(A,\cc,\varepsilon,\rho) = n_{\ell^\dagger}}, \quad 
+ 	 \MoveEqLeft{\alert{\COST(A,\cc,\varepsilon,\rho) = n_{\ell^\dagger}}, \quad 
  	 \ell^\dagger \le \min \left \{\ell \in \naturals : \frac{\rho^2}{\varepsilon^2} \le \frac{(1 - b^2)}{a^2b^2} \left[ \sum_{k=1}^{\ell-1} \frac{b^{2(k-\ell)}}{a^2\lambda_{n_{k-1}+1}^2} + \frac{1}{\lambda_{n_{\ell-1}+1}^2}\right]   \right\}} \\
- 	 \MoveEqLeft{\cost(A,\cc,\varepsilon,\rho) \text{ \alert{essentially no worse than} } \comp(\ca(\cc,\LambdaAll),\varepsilon,\rho)}\\
+ 	 \MoveEqLeft{\COST(A,\cc,\varepsilon,\rho) \text{ \alert{essentially no worse than} } \comp(\ca(\cc,\LambdaAll),\varepsilon,\rho)}\\
  	 \MoveEqLeft{\text{\alert{No} tractability results}}}
 \end{align*}
 
@@ -739,7 +902,7 @@ Chebyshev \tabularnewline
         \end{itemize}
         \item General linear problems
         \begin{itemize}
-            \item Constructed $A \in \ca(\cc,\LambdaSer)$, upper bound on $\cost(A,\cc,\varepsilon,\rho)$, lower bound on $\comp(\ca(\cc,\LambdaAll),\varepsilon,\rho)$, optimality
+            \item Constructed $A \in \ca(\cc,\LambdaSer)$, upper bound on $\COST(A,\cc,\varepsilon,\rho)$, lower bound on $\comp(\ca(\cc,\LambdaAll),\varepsilon,\rho)$, optimality
             \item No tractability yet
         \end{itemize}
         \item Function approximation (recovery)
