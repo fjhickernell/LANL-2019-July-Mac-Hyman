@@ -183,10 +183,10 @@ Function approximation is relatively simple compared to many other continuous nu
 \end{frame}
 
 \begin{frame}{Smoothness Helps}
-For $d = 1$, let $u_1, u_2, \ldots$ be linearly independent (polynomials) 
+For $d = 1$, let $\{u_1, u_2, \ldots\}$ be a (polynomial) basis for $\cf$ and $\cg$
 \begin{gather*}
-    \cf := \left \{ f = \sum_{i=1}^n \hf(i) u_i  : \norm[\cf]{f} : = \norm[2]{\left(\frac{\hf(i)}{\lambda_i} \right)_{i=1}^\infty } < \infty \right \}, \qquad \lambda_1 \ge  \lambda_2 \ge \cdots > 0 \\
-   \cg := \left \{ g = \sum_{i=1}^n \hg(i) u_i  : \norm[\cg]{g} : = \norm[2]{\bigl(\hg(i) \bigr)_{i=1}^\infty } < \infty \right \}, \qquad \app(f,n) = \sum_{i=1}^n L_i(f) g_{i,n}
+    \cf := \left \{ f = \sum_{k=1}^n \hf(i) u_i  : \norm[\cf]{f} : = \norm[2]{\left(\frac{\hf(k)}{\lambda_k} \right)_{k=1}^\infty } < \infty \right \}, \qquad \lambda_1 \ge  \lambda_2 \ge \cdots > 0 \\
+   \cg := \left \{ g = \sum_{k=1}^n \hg(i) u_i  : \norm[\cg]{g} : = \norm[2]{\bigl(\hg(i) \bigr)_{k=1}^\infty } < \infty \right \}, \qquad \app(f,n) = \sum_{i=1}^n L_i(f) g_{i,n}
 \end{gather*}
 
     
@@ -195,28 +195,31 @@ For $d = 1$, let $u_1, u_2, \ldots$ be linearly independent (polynomials)
 \begin{frame}{Legendre and Chebyshev Bases for Function Approximation}
 \vspace{-3ex}
 	\begin{tabular}{>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}}
-		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_0_1D_i.png}  &
-		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_1_1D_i.png}  &
-		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_2_1D_i.png}  &
-		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_3_1D_i.png}  &
-		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_4_1D_i.png} 
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_0_1D_k.png}  &
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_1_1D_k.png}  &
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_2_1D_k.png}  &
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_3_1D_k.png}  &
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_4_1D_k.png} 
 	\tabularnewline[-7ex]
 	Legendre
 	\tabularnewline
-\tabularnewline[0ex]
-		\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_0_1D_i.png}  &
-\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_1_1D_i.png}  &
-\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_2_1D_i.png}  &
-\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_3_1D_i.png}  &
-\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_4_1D_i.png} 
+\tabularnewline[2ex]
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_0_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_1_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_2_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_3_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_4_1D_k.png} 
 \tabularnewline[-7ex]
-Chebyshev \tabularnewline
+Chebyshev
 \tabularnewline
-\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_1_1.png}  &
-\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_1_2.png}  &
-\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_1_3.png}  &
-\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_2_2.png}  &
-\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_2_3.png} 
+\tabularnewline[2ex]
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_0_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/CosineSine_Degree_1_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/CosineSine_Degree_2_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/CosineSine_Degree_3_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/CosineSine_Degree_4_1D_k.png} 
+\tabularnewline[-7ex]
+Sine and Cosine \tabularnewline
 	\end{tabular}
 \end{frame}
 
