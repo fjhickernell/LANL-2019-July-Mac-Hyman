@@ -10,13 +10,14 @@ s_max = 4;
 d = 2;
 twoD = [1 1; 1 2; 1 3; 1 4; 2 2; 2 3];
 nTwoD = size(twoD,1);
+wvnum = 'i';
 
 basisHandles = {@WalshBasis,@legendreBasis,@chebyshevBasis,@CosSinBasis};
 basisNames = ["Walsh","Legendre","Chebyshev","CosineSine"];
 nBasis = length(basisNames);
 aa = [0 -1 -1 0];
 bb = [1 1 1 1];
-for nB = 1:1
+for nB = 1:nBasis
    % One dimensional basis plots
    a = aa(nB);
    b = bb(nB);
@@ -33,13 +34,23 @@ for nB = 1:1
       plot(x1plot,y,'-')
       axis([a b -1.2 1.2])
       set(gca,'Visible','off')
-      text(horizOff,vertOff,['\boldmath\(j\,\) \unboldmath \(= (' int2str(s) ', 0, \ldots, 0)\)'], ...
+      text(horizOff,vertOff,['\boldmath\(' wvnum '\) \unboldmath \(= (' int2str(s) ', 0, \ldots, 0)\)'], ...
          'interpreter','latex','fontsize',48)
        eval(['print(''' char(basisNames(nB)) '_Degree_' int2str(s) '.png'',' ...
           '''-dpng'')'])
       eval(['print(''' char(basisNames(nB)) '_Degree_' int2str(s) '.eps'',' ...
          '''-depsc'', ''-opengl'')'])
-   end
+      figure
+      plot(x1plot,y,'-')
+      axis([a b -1.2 1.2])
+      set(gca,'Visible','off')
+      text(horizOff,vertOff,['\(' wvnum ' = ' int2str(s) '\)'], ...
+         'interpreter','latex','fontsize',48)
+       eval(['print(''' char(basisNames(nB)) '_Degree_' int2str(s) '_1D.png'',' ...
+          '''-dpng'')'])
+      eval(['print(''' char(basisNames(nB)) '_Degree_' int2str(s) '_1D.eps'',' ...
+         '''-depsc'', ''-opengl'')'])
+  end
    
    %Two-dimensional basis plots
    xOff = a;
@@ -51,7 +62,7 @@ for nB = 1:1
       surf(xx,yy,z); shading interp
       axis([a b a b -1.2 1.2])
       set(gca,'Visible','off')
-      text(xOff,yOff,zOff,['\boldmath\(j\,\) \unboldmath \(= (' int2str(twoD(j,1)), ...
+      text(xOff,yOff,zOff,['\boldmath\(' wvnum '\) \unboldmath \(= (' int2str(twoD(j,1)), ...
          ',' int2str(twoD(j,2)) ', 0, \ldots, 0)\)'], ...
          'interpreter','latex','fontsize',48)
        eval(['print -dpng ' char(basisNames(nB)) '_Degree_' int2str(twoD(j,1)) ...
