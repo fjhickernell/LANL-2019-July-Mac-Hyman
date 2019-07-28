@@ -13,6 +13,7 @@
 	colortbl,
 	scrextend,
  	graphicx}
+\addtokomafont{labelinglabel}{\itshape\textcolor{IITred!80!IITgray}}
 \usepackage[usenames]{xcolor}
 \usepackage[giveninits=false,backend=biber,style=nature, maxcitenames =10, mincitenames=9]{biblatex}
 \addbibresource{FJHown23.bib}
@@ -110,18 +111,22 @@ Function approximation is relatively simple compared to many other continuous nu
 
 \vspace{-5ex}
 
-\begin{description}[]
-    \item[Input]\mbox{ }
+\begin{itemize}[]
+    \item  Input
+    \begin{addmargin}{3ex}
     \begin{labeling}{Error Tolerance}
        \item[\alert<1>{Black box}] providing \only<1>{\alert{noisy} or }\alert{noiseless} information about $f:\Omega \subseteq \reals^d \to \reals$
-    \only<1-2>{ \\ e.g., function values, series coefficients, or linear functionals,} \alert{costing} $\$(f)$ each
+    \only<1-2>{ \\ e.g., function values or series coefficients,} \alert{costing} $\$(f)$ each
        \only<3->{\\ \alert<3>{$f \in \cf$, definition of $\norm[\cf]{\cdot}$ enshrines smoothness assumptions}}
         
         \item[\alert<1>{Error tolerance}] $\varepsilon$
      
     \end{labeling}
+    \end{addmargin}
+    \vspace{1ex}
     
-    \item[Output]  $\alg(f,\varepsilon)$ \only<1>{(as a surrogate, for solving PDEs, for uncertainty quantification) }that is
+    \item Output $\alg(f,\varepsilon)$ \only<1>{(as a surrogate, for solving PDEs, for uncertainty quantification) }that is
+    \begin{addmargin}{3ex}
     \begin{labeling}{Accurate}
         \item[\alert<1>{Cheap}] to evaluate
         
@@ -130,27 +135,34 @@ Function approximation is relatively simple compared to many other continuous nu
         \item[\alert<1>{Efficient}] to construct\uncover<5->{, \alert{$\COST(f,\varepsilon) = \Order( \varepsilon^{-p} R^p d^q)$ for $\norm[\cf]{f} \le R$ and optimal $p$ and $q$}}
 
     \end{labeling}
+    \end{addmargin}
+    \vspace{1ex}
 
-	\item<2->[Approximation] with fixed computation budget: $\app(f,n) = \sum_{i=1}^n L_i(f) g_{i,n}$
+	\item<2-> Approximation  with fixed computation budget: $\app(f,n) = \sum_{i=1}^n L_i(f) g_{i,n}$
+	\setbeamertemplate{itemize items}[triangle]
 	\begin{itemize}
 	    \item $L_1(f), L_2(f), \ldots$ is input function information% 
 	    \only<2>{, e.g., function values or series coefficients}
 	    \item $\vg_n = (g_{1,n}, \ldots, g_{n,n}) \in \cg^n$
 	    \item $ \alert{\COST(f,n)} = \Order(n \$(f) + \COST( \vg_n))$
 	\end{itemize}
+    \vspace{1ex}
 	
-	\item<2->[Algorithm] $\alg(f,\varepsilon) = \app(f,n^*(f,\varepsilon))$ satisfying  
+	\item<2-> Algorithm $\alg(f,\varepsilon) = \app(f,n^*(f,\varepsilon))$ satisfying  
 	$\norm[\cg]{f -  \app(f,n^*(f,\varepsilon))} \le \varepsilon$ \uncover<4->{\quad \alert<4>{$\forall f \in \ch \subset \cf$}}
+	\setbeamertemplate{itemize items}[triangle]
 		\begin{itemize}
 	    \item $ \alert{\COST(f,\varepsilon)} = \COST(f,n^*(f,\varepsilon)) + \text{ cost to determine } n^*(f,\varepsilon)$
 	\end{itemize}
 
 
-\end{description}
+\end{itemize}
 
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Solvability}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}{Impossible for All $f$ in Infinite Dimensional $\cf$}
 \vspace{-5ex}
@@ -182,17 +194,44 @@ Function approximation is relatively simple compared to many other continuous nu
 
 \end{frame}
 
-\begin{frame}{Smoothness Helps}
-For $d = 1$, let $\{u_1, u_2, \ldots\}$ be a (polynomial) basis for $\cf$ and $\cg$
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Smoothness}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}<1>[label = smoothness]{Smoothness Makes Algorithm Less Expensive}
+\vspace{-3ex}
+For \alert{$d = 1$}, let $\{u_1, u_2, \ldots\}$ be an orthogonal (polynomial) basis for $\cf$ and $\cg$
+
+\vspace{-6ex}
 \begin{gather*}
-    \cf := \left \{ f = \sum_{k=1}^n \hf(i) u_i  : \norm[\cf]{f} : = \norm[2]{\left(\frac{\hf(k)}{\lambda_k} \right)_{k=1}^\infty } < \infty \right \}, \qquad \lambda_1 \ge  \lambda_2 \ge \cdots > 0 \\
-   \cg := \left \{ g = \sum_{k=1}^n \hg(i) u_i  : \norm[\cg]{g} : = \norm[2]{\bigl(\hg(i) \bigr)_{k=1}^\infty } < \infty \right \}, \qquad \app(f,n) = \sum_{i=1}^n L_i(f) g_{i,n}
+    \cf := \left \{ f = \sum_{k=0}^\infty \hf(k) u_k  : \norm[\cf]{f} : = \norm[2]{\left(\frac{\hf(k)}{\lambda_k} \right)_{k=0}^\infty } < \infty \right \}, \qquad \lambda_1 \ge  \lambda_2 \ge \cdots > 0 \\
+   \cg := \left \{ g = \sum_{k=0}^\infty \hg(k) u_k  : \norm[\cg]{g} : = \norm[2]{\bigl(\hg(k) \bigr)_{k=0}^\infty } < \infty \right \}, \qquad \app(f,n) = \sum_{k=0}^{n-1} \hf(k) u_{k} 
+   \uncover<2->{\\
+   \norm[\cg]{f - \app(f,n)} 
+   = \norm[2]{\bigl(\hf(k) \bigr)_{k=n}^\infty } 
+   = \norm[2]{\left(\frac{\lambda_k \, \hf(k)}{\lambda_k} \right)_{k=n}^\infty} \underbrace{\le}_{\text{tight}} \norm[\cf]{f} \lambda_{n} \alert{\overset{?}{\le}} \varepsilon, \quad \alert{\text{require } \lambda_n \downarrow 0}}
 \end{gather*}
 
+\uncover<3->{
+\vspace{-3ex}
+By choosing $\ch = \cb_R := \{ f \in \cf : \norm[\cf]{f} \le R\}$, we can define our \alert{algorithm}
+\begin{gather*}
+    \alg(f,\varepsilon) 
+    = \app(f,n^*), \quad n^* = \min\{n : \lambda_{n} \le R/\varepsilon\}, \qquad
+    \norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon \quad \forall f \in \cb_R\\ 
+    \lambda_n = \Order(n^{-1/p}) \implies \COST(\cb_R,\varepsilon) = \Order(R^p\varepsilon^{-p})
+\end{gather*}
+\vspace{-7ex}
+\begin{itemize}
+    \item<4-> $\alg$ has \alert{optimal} cost among all successful algorithms using Fourier coefficients \\
+    (look at the cost of approximating the zero function)
+    \item<5-> Similar results for algorithms based on \alert{function values}, but need to choose the \alert{design} carefully
+\end{itemize}
+}
     
 \end{frame}
 
-\begin{frame}{Legendre and Chebyshev Bases for Function Approximation}
+\begin{frame}{Bases for Function Approximation}
 \vspace{-3ex}
 	\begin{tabular}{>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}}
 		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_0_1D_k.png}  &
@@ -223,11 +262,63 @@ Sine and Cosine \tabularnewline
 	\end{tabular}
 \end{frame}
 
+\againframe<2->{smoothness}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Tractability}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}{Smoothness Cannot Save You from the Curse of Dimensionality\footfullcite{NovWoz08a}}
+\vspace{-3ex}
+For \alert{arbitrary $d$}, let $\{u_0 = 1, u_1\}$ be used to construct a product basis $\cf$ and $\cg$ (multlinear functions)
+
+\vspace{-6ex}
+\begin{gather*}
+    \cf := \left \{ f(\vx) = \sum_{\vk \in \{0,1\}^d} \hf(\vk) u_\vk  : \norm[\cf]{f} : = \norm[2]{\left(\frac{\hf(\vk)}{\lambda_\vk} \right)_{\vk \in \{0,1\}^d} } < \infty \right \}, \qquad u_\vk(\vx) := \prod_{\ell = 1}^d u_{k_\ell} (x_\ell)\\
+   \cg := \left \{ g = \sum_{\vk \in \{0,1\}^d} \hg(\vk) u_\vk  : \norm[\cg]{g} : = \norm[2]{\bigl(\hg(k) \bigr)_{\vk \in \{0,1\}^d} } < \infty \right \}, \qquad \lambda_\vk := \prod_{\ell = 1}^d \lambda^{k_\ell} = \lambda^{\norm[0]{\vk}}\\
+   \app(f,n) = \sum_{i=1}^n \hf(\vk_i) u_{\vk_i} , \qquad 
+   \lambda_{\vk_1} = 1 \ge \lambda = \lambda_{\vk_2} \ge \cdots \ge \lambda^{d}
+   \uncover<2->{\\
+    \alg(f,\varepsilon) 
+    = \app(f,n^*), \quad n^* = \min\{n : \lambda_{\vk_{n+1}} \le R/\varepsilon\}, \qquad
+    \norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon \quad \forall f \in \cb_R\\ 
+    \lambda_{\vk_n} = \Order\bigl(n^{-1/p}(1 + \lambda^p)^{\alert{d}/p}\bigr) \implies \COST(\cb_R,\varepsilon) = \Order\bigr(R^p\varepsilon^{-p}(1 + \lambda^p)^{\alert{d}/p} \bigl)} \quad \forall p
+\end{gather*}
 
 
+    
+\end{frame}
 
 
-
+\begin{frame}{Bases for Function Approximation}
+\vspace{-3ex}
+	\begin{tabular}{>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}>{\centering}m{0.18\textwidth}}
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_0_k.png}  &
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_1_k.png}  &
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_2_1D_k.png}  &
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_3_1D_k.png}  &
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Legendre_Degree_4_1D_k.png} 
+	\tabularnewline[-7ex]
+	Legendre
+	\tabularnewline
+\tabularnewline[2ex]
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_0_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_1_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_2_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_3_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_4_1D_k.png} 
+\tabularnewline[-7ex]
+Chebyshev
+\tabularnewline
+\tabularnewline[2ex]
+		\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_0_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/CosineSine_Degree_1_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/CosineSine_Degree_2_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/CosineSine_Degree_3_1D_k.png}  &
+\includegraphics[width =0.18\textwidth]{ProgramsImages/CosineSine_Degree_4_1D_k.png} 
+\tabularnewline[-7ex]
+Sine and Cosine \tabularnewline
+	\end{tabular}
+\end{frame}
 
 
 
