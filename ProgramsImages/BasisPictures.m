@@ -10,7 +10,7 @@ s_max = 4;
 d = 2;
 twoD = [1 1; 1 2; 1 3; 1 4; 2 2; 2 3];
 nTwoD = size(twoD,1);
-wvnum = 'i';
+wvnum = 'k';
 
 basisHandles = {@WalshBasis,@legendreBasis,@chebyshevBasis,@CosSinBasis};
 basisNames = ["Walsh","Legendre","Chebyshev","CosineSine"];
