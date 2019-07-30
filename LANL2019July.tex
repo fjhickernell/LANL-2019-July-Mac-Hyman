@@ -41,7 +41,7 @@
 \newcommand{\dataNjd}{\bigl(\hf(\vk_i)\bigr)_{i=1}^{n_{j^\dagger}}}
 \newcommand{\ERRN}{\ERR\bigl(\dataN,n\bigr)}
 
-\newcommand{\Sapp}{S_{\textup{app}}}
+\newcommand{\Sapp}{S_{\textup{app}}} 
 \newcommand{\LambdaStd}{\Lambda^{\textup{std}}}
 \newcommand{\LambdaSer}{\Lambda^{\textup{ser}}}
 \newcommand{\LambdaAll}{\Lambda^{\textup{all}}}
@@ -298,14 +298,15 @@ For \alert{arbitrary $d$}, let $\{u_0 = 1, u_1\}$ be used to construct a product
 \vspace{-6ex}
 \begin{gather*}
     \cf := \left \{ f(\vx) = \sum_{\vk \in \{0,1\}^d} \hf(\vk) u_\vk  : \norm[\cf]{f} : = \norm[2]{\left(\frac{\hf(\vk)}{\lambda_\vk} \right)_{\vk \in \{0,1\}^d} } < \infty \right \}, \qquad u_\vk(\vx) := \prod_{\ell = 1}^d u_{k_\ell} (x_\ell)\\
-   \cg := \left \{ g = \sum_{\vk \in \{0,1\}^d} \hg(\vk) u_\vk  : \norm[\cg]{g} : = \norm[2]{\bigl(\hg(k) \bigr)_{\vk \in \{0,1\}^d} } < \infty \right \}, \qquad \lambda_\vk := \prod_{\ell = 1}^d s^{k_\ell} = s^{\norm[0]{\vk}}\\
+   \cg := \left \{ g = \sum_{\vk \in \{0,1\}^d} \hg(\vk) u_\vk  : \norm[\cg]{g} : = \norm[2]{\bigl(\hg(k) \bigr)_{\vk \in \{0,1\}^d} } < \infty \right \}, \qquad \lambda_\vk := \prod_{\substack{\ell = 1 \\ k_\ell \ne 0}}^d \only<3->{\alert<3->{w_\ell}}\only<1-3>{\alert<1-2>{s}} \only<1-2>{= s^{\norm[0]{\vk}}}\\
    \app(f,n) = \sum_{i=1}^n \hf(\vk_i) u_{\vk_i} , \qquad 
-   \lambda_{\vk_1} = 1 \ge s = \lambda_{\vk_2} \ge \cdots \ge s^{d}
+   \lambda_{\vk_1} = 1 \ge \only<3->{w_1} s = \lambda_{\vk_2} \ge \cdots \only<1-2>{\ge s^{d}}, \quad \only<3->{\alert<3>{w_1 \ge w_2 \ge \cdots }}
    \uncover<2->{\\
     \alg(f,\varepsilon) 
     = \app(f,n^*), \quad n^* = \min\{n : \lambda_{\vk_{n+1}} \le R/\varepsilon\}, \qquad
     \norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon \quad \forall f \in \cb_R\\ 
-    \lambda_{\vk_n} = \Order\bigl(n^{-1/p}(1 + s^p)^{\alert{d}/p}\bigr) \implies \COST(\cb_R,\varepsilon) = \Order\bigr(R^p\varepsilon^{-p}(1 + s^p)^{\alert{d}/p} \bigl) \quad \forall p \quad \alert{\text{exponential growth in $d$}}}
+    \lambda_{\vk_n} = \Order\bigl(n^{-1/p}\only<1-2>{(1 + s^p)^{\alert{d}/p}}\only<3->{\exp\bigl(s^p \textstyle \sum_{\ell=1}^d w_\ell^p \bigr)}\bigr) 
+    \implies \COST(\cb_R,\varepsilon) = \Order\bigr(R^p\varepsilon^{-p}(1 + s^p)^{\alert{d}} \bigl) \quad \forall p \quad \alert{\text{exponential growth in $d$}}}
 \end{gather*}
 
 
@@ -339,19 +340,20 @@ Sine and Cosine \tabularnewline
 \end{frame}
 
 
-\againframe<2->{tract}
+\againframe<2>{tract}
 
-\begin{frame}{Proof that $\lambda_{k_{n+1}} = \Order\bigl(n^{-1/p}(1 + \lambda^p)^{\alert{d}/p}\bigr) \ \forall p > 0$}
+\begin{frame}{Proof that $\lambda_{k_{n+1}} = \Order\bigl(n^{-1/p}(1 + s^p)^{\alert{d}/p}\bigr) \ \forall p > 0$}
 
 \begin{align*}
     \lambda_{\vk_{n+1}}^p &\le \frac 1n \bigl( \lambda_{\vk_{1}}^p + \cdots + \lambda_{\vk_{n}}^p \bigr) \qquad \lambda_{\vk_{i}} \text{ are ordered} \\
     \lambda_{\vk_{n+1}} &\le \frac 1{n^{1/p}} \bigl( \lambda_{\vk_{1}}^p + \cdots + \lambda_{\vk_{n}}^p \bigr)^{1/p} \qquad p^{\text{th}} \text{ root} \\
      &\le \frac 1{n^{1/p}} \bigl( \lambda_{\vk_{1}}^p + \cdots + \lambda_{\vk_{2^d}}^p \bigr)^{1/p} \qquad  \text{add the rest in} \\
-     &\le \frac 1{n^{1/p}} \bigl( 1 + \lambda^p \bigr)^{\alert{d}/p} \qquad  \text{binomial theorem} \\
+     &\le \frac 1{n^{1/p}} \bigl( 1 + s^p \bigr)^{\alert{d}/p} \qquad  \text{binomial theorem} 
 \end{align*}
     
 \end{frame}
 
+\againframe<3->{tract}
 
 
 \begin{frame}{Context}
