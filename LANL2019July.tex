@@ -105,7 +105,29 @@ Function approximation is relatively simple compared to many other continuous nu
 \everymath{\displaystyle}
 \frame{\titlepage}
 
-\section{Problem}
+\section{Introduction}
+
+\begin{frame}{Highlights}
+
+\vspace{-8ex}
+
+\begin{gather*}
+    \text{Find } \alg \text{ such that } \\
+    \text{Given \alert{black box} providing information about }f: \Omega \subset \reals^d \to \reals \\
+    \norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon \qquad \forall \varepsilon > 0, \ f \in \ch \subseteq \cf \text{ (Banach space)}
+\end{gather*}
+
+\begin{itemize}
+    \item \alert{Impossible} for infinite dimensional Banach space $\ch$
+    
+    \item Smoothness assumed by $\ch$ speeds up $\alg$
+    
+    \item Smoothness alone cannot save you from the \alert{curse of dimensionality}, you need a low dimensional structure
+    
+    \item Choosing $\ch$ to be a \alert{cone}, rather than a ball, paves the way for \alert{adaptive} algorithms
+\end{itemize}
+    
+\end{frame}
 
 \begin{frame}{Problem}
 
@@ -115,11 +137,11 @@ Function approximation is relatively simple compared to many other continuous nu
     \item  Input
     \begin{addmargin}{3ex}
     \begin{labeling}{Error Tolerance}
-       \item[\alert<1>{Black box}] providing \only<1>{\alert{noisy} or }\alert{noiseless} information about $f:\Omega \subseteq \reals^d \to \reals$
+       \item[Black box] providing \only<1>{\alert{noisy} or }\alert{noiseless} information about $f:\Omega \subseteq \reals^d \to \reals$
     \only<1-2>{ \\ e.g., function values or series coefficients,} \alert{costing} $\$(f)$ each
        \only<3->{\\ \alert<3>{$f \in \cf$, definition of $\norm[\cf]{\cdot}$ enshrines smoothness assumptions}}
         
-        \item[\alert<1>{Error tolerance}] $\varepsilon$
+        \item[Error tolerance] $\varepsilon$
      
     \end{labeling}
     \end{addmargin}
@@ -128,11 +150,12 @@ Function approximation is relatively simple compared to many other continuous nu
     \item Output $\alg(f,\varepsilon)$ \only<1>{(as a surrogate, for solving PDEs, for uncertainty quantification) }that is
     \begin{addmargin}{3ex}
     \begin{labeling}{Accurate}
-        \item[\alert<1>{Cheap}] to evaluate
+        \item[Cheap] to evaluate
         
-        \item[\alert<1>{Accurate}] $\norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon$ \uncover<4->{\quad \alert<4>{$\forall f \in \ch \subset \cf$}}
+        \item[Accurate] $\norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon \qquad \forall \varepsilon > 0\uncover<3->{, \ \alert<3>{f \in \ch \subset \cf}}$%
+        \uncover<3->{\alert<3>{, provably}}
         
-        \item[\alert<1>{Efficient}] to construct\uncover<5->{, \alert{$\COST(f,\varepsilon) = \Order( \varepsilon^{-p} R^p d^q)$ for $\norm[\cf]{f} \le R$ and optimal $p$ and $q$}}
+        \item[Efficient] to construct
 
     \end{labeling}
     \end{addmargin}
@@ -149,7 +172,8 @@ Function approximation is relatively simple compared to many other continuous nu
     \vspace{1ex}
 	
 	\item<2-> Algorithm $\alg(f,\varepsilon) = \app(f,n^*(f,\varepsilon))$ satisfying  
-	$\norm[\cg]{f -  \app(f,n^*(f,\varepsilon))} \le \varepsilon$ \uncover<4->{\quad \alert<4>{$\forall f \in \ch \subset \cf$}}
+	$\norm[\cg]{f -  \app(f,n^*(f,\varepsilon))} \le \varepsilon \ \  \forall \varepsilon > 0 \uncover<3->{,\ \alert<3>{f \in \ch \subset \cf}}$
+	
 	\setbeamertemplate{itemize items}[triangle]
 		\begin{itemize}
 	    \item $ \alert{\COST(f,\varepsilon)} = \COST(f,n^*(f,\varepsilon)) + \text{ cost to determine } n^*(f,\varepsilon)$
@@ -242,7 +266,7 @@ By choosing $\ch = \cb_R := \{ f \in \cf : \norm[\cf]{f} \le R\}$, we can define
 	\tabularnewline[-7ex]
 	Legendre
 	\tabularnewline
-\tabularnewline[2ex]
+\tabularnewline[3ex]
 		\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_0_1D_k.png}  &
 \includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_1_1D_k.png}  &
 \includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_2_1D_k.png}  &
@@ -251,7 +275,7 @@ By choosing $\ch = \cb_R := \{ f \in \cf : \norm[\cf]{f} \le R\}$, we can define
 \tabularnewline[-7ex]
 Chebyshev
 \tabularnewline
-\tabularnewline[2ex]
+\tabularnewline[3ex]
 		\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_0_1D_k.png}  &
 \includegraphics[width =0.18\textwidth]{ProgramsImages/CosineSine_Degree_1_1D_k.png}  &
 \includegraphics[width =0.18\textwidth]{ProgramsImages/CosineSine_Degree_2_1D_k.png}  &
@@ -267,21 +291,21 @@ Sine and Cosine \tabularnewline
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Tractability}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{frame}{Smoothness Cannot Save You from the Curse of Dimensionality\footfullcite{NovWoz08a}}
+\begin{frame}<1>[label = tract]{\only<1-2>{Smoothness Cannot Save You from the Curse of Dimensionality}\only<3->{Coordinate Weights Can Save You}\footfullcite{NovWoz08a}}
 \vspace{-3ex}
 For \alert{arbitrary $d$}, let $\{u_0 = 1, u_1\}$ be used to construct a product basis $\cf$ and $\cg$ (multlinear functions)
 
 \vspace{-6ex}
 \begin{gather*}
     \cf := \left \{ f(\vx) = \sum_{\vk \in \{0,1\}^d} \hf(\vk) u_\vk  : \norm[\cf]{f} : = \norm[2]{\left(\frac{\hf(\vk)}{\lambda_\vk} \right)_{\vk \in \{0,1\}^d} } < \infty \right \}, \qquad u_\vk(\vx) := \prod_{\ell = 1}^d u_{k_\ell} (x_\ell)\\
-   \cg := \left \{ g = \sum_{\vk \in \{0,1\}^d} \hg(\vk) u_\vk  : \norm[\cg]{g} : = \norm[2]{\bigl(\hg(k) \bigr)_{\vk \in \{0,1\}^d} } < \infty \right \}, \qquad \lambda_\vk := \prod_{\ell = 1}^d \lambda^{k_\ell} = \lambda^{\norm[0]{\vk}}\\
+   \cg := \left \{ g = \sum_{\vk \in \{0,1\}^d} \hg(\vk) u_\vk  : \norm[\cg]{g} : = \norm[2]{\bigl(\hg(k) \bigr)_{\vk \in \{0,1\}^d} } < \infty \right \}, \qquad \lambda_\vk := \prod_{\ell = 1}^d s^{k_\ell} = s^{\norm[0]{\vk}}\\
    \app(f,n) = \sum_{i=1}^n \hf(\vk_i) u_{\vk_i} , \qquad 
-   \lambda_{\vk_1} = 1 \ge \lambda = \lambda_{\vk_2} \ge \cdots \ge \lambda^{d}
+   \lambda_{\vk_1} = 1 \ge s = \lambda_{\vk_2} \ge \cdots \ge s^{d}
    \uncover<2->{\\
     \alg(f,\varepsilon) 
     = \app(f,n^*), \quad n^* = \min\{n : \lambda_{\vk_{n+1}} \le R/\varepsilon\}, \qquad
     \norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon \quad \forall f \in \cb_R\\ 
-    \lambda_{\vk_n} = \Order\bigl(n^{-1/p}(1 + \lambda^p)^{\alert{d}/p}\bigr) \implies \COST(\cb_R,\varepsilon) = \Order\bigr(R^p\varepsilon^{-p}(1 + \lambda^p)^{\alert{d}/p} \bigl)} \quad \forall p
+    \lambda_{\vk_n} = \Order\bigl(n^{-1/p}(1 + s^p)^{\alert{d}/p}\bigr) \implies \COST(\cb_R,\varepsilon) = \Order\bigr(R^p\varepsilon^{-p}(1 + s^p)^{\alert{d}/p} \bigl) \quad \forall p \quad \alert{\text{exponential growth in $d$}}}
 \end{gather*}
 
 
@@ -298,14 +322,14 @@ For \alert{arbitrary $d$}, let $\{u_0 = 1, u_1\}$ be used to construct a product
 		\tabularnewline[-7ex]
 	Legendre
 	\tabularnewline
-\tabularnewline[2ex]
+\tabularnewline[3ex]
 		\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_0_k.png}  &
 \includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_1_k.png}  &
 \includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_1_1_k.png}  
 \tabularnewline[-7ex]
 Chebyshev
 \tabularnewline
-\tabularnewline[2ex]
+\tabularnewline[3ex]
 		\includegraphics[width =0.18\textwidth]{ProgramsImages/Chebyshev_Degree_0_k.png}  &
 \includegraphics[width =0.18\textwidth]{ProgramsImages/CosineSine_Degree_1_k.png}  &
 \includegraphics[width =0.18\textwidth]{ProgramsImages/CosineSine_Degree_1_1_k.png}   
@@ -315,7 +339,18 @@ Sine and Cosine \tabularnewline
 \end{frame}
 
 
+\againframe<2->{tract}
 
+\begin{frame}{Proof that $\lambda_{k_{n+1}} = \Order\bigl(n^{-1/p}(1 + \lambda^p)^{\alert{d}/p}\bigr) \ \forall p > 0$}
+
+\begin{align*}
+    \lambda_{\vk_{n+1}}^p &\le \frac 1n \bigl( \lambda_{\vk_{1}}^p + \cdots + \lambda_{\vk_{n}}^p \bigr) \qquad \lambda_{\vk_{i}} \text{ are ordered} \\
+    \lambda_{\vk_{n+1}} &\le \frac 1{n^{1/p}} \bigl( \lambda_{\vk_{1}}^p + \cdots + \lambda_{\vk_{n}}^p \bigr)^{1/p} \qquad p^{\text{th}} \text{ root} \\
+     &\le \frac 1{n^{1/p}} \bigl( \lambda_{\vk_{1}}^p + \cdots + \lambda_{\vk_{2^d}}^p \bigr)^{1/p} \qquad  \text{add the rest in} \\
+     &\le \frac 1{n^{1/p}} \bigl( 1 + \lambda^p \bigr)^{\alert{d}/p} \qquad  \text{binomial theorem} \\
+\end{align*}
+    
+\end{frame}
 
 
 
