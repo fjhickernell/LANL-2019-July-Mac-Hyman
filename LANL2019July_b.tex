@@ -245,7 +245,7 @@ For \alert{$d = 1$}, let $\{u_1, u_2, \ldots\}$ be an orthogonal (polynomial) ba
 By choosing $\ch = \cb_R := \{ f \in \cf : \norm[\cf]{f} \le R\}$, we can define our \alert{algorithm}
 \begin{gather*}
     \alg(f,\varepsilon) 
-    = \app(f,n^*), \quad n^* = \min\{n : \lambda_{n} \le R/\varepsilon\}, \qquad
+    = \app(f,n^*), \quad n^* = \min\{n : \lambda_{n} \le \varepsilon/R\}, \qquad
     \norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon \quad \forall f \in \cb_R\\ 
     \lambda_n = \Order(n^{-1/p}) \implies \COST(\cb_R,\varepsilon) = \Order(R^p\varepsilon^{-p})
 \end{gather*}
@@ -309,7 +309,7 @@ For \alert{arbitrary $d$}, let $\{u_0 = 1, u_1\only<4->{\alert{, \ldots}}\}$ be 
    \lambda_{\vk_1} = 1 \ge \only<1-3>{\only<3>{w_1} s =} \lambda_{\vk_2} \ge \cdots \only<1-2>{\ge s^{d}}, \quad \only<3->{\alert<3>{1=w_1 \ge w_2 \ge \cdots }}
    \uncover<2->{\\
     \alg(f,\varepsilon) 
-    = \app(f,n^*), \quad n^* = \min\{n : \lambda_{\vk_{n+1}} \le R/\varepsilon\}, \qquad
+    = \app(f,n^*), \quad n^* = \min\{n : \lambda_{\vk_{n+1}} \le \varepsilon/R\}, \qquad
     \norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon \quad \forall f \in \cb_R\\
     \lambda_{\vk_n} = \Order\bigl(n^{-1/p}\only<1-2>{\me^{s^p\alert{d}/p}}%
     \only<3->{\exp\bigl(p^{-1} \textstyle \only<3>{s^p}
@@ -413,14 +413,14 @@ Sine and Cosine \tabularnewline
 		\end{minipage} }
 		\end{align*}
 		\vspace{-2ex}
-\only<2-4>{\begin{equation*}
+\uncover<2->{\begin{equation*}
     \norm[\cg]{\sol(f) - \app(f,n)} \le \underbrace{\left[ A^2 \norm[2]{\left( \frac{\hf(\vk_i)}{\lambda_{\vk_i}} \right)_{i=1}^{n_1}}^2 -  \norm[2]{\left(\frac{\hf(\vk_i)}{\lambda_{\vk_i}}\right)_{i=1}^n}^2 \right]^{1/2}}_{\text{upper bound on } \norm[\cf]{f - \sum_{i=1}^{n} \hf(\vk_i) u_{\vk_i}}}
     \, 
     \lambda_{\vk_{n+1}} =: \underbrace{\ERRN}_{\alert{\text{data-driven}}}
     \quad 
 \end{equation*}
 }
-    \only<3->{\vspace{-2ex}
+    \uncover<3->{\vspace{-2ex}
     \begin{align*}
 	\alert<3>{\alg(f,\varepsilon)} & 
 	\alert<3>{= \app(f,n^*(f,\varepsilon))} 
@@ -441,8 +441,32 @@ Sine and Cosine \tabularnewline
 	
 \end{frame}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Design}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{frame}{Challenges When Using Function Values as Information}
+\vspace{-4ex}
+\alert{Goal:} Construct $\alg$  such that given a \alert{black box} providing information about $f: \Omega \subset \reals^d \to \reals$
+\begin{equation*}
+    \norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon \qquad \forall \varepsilon > 0, \; f \in \ch \subseteq \cf \text{ (Banach space)}
+\end{equation*}
 
+\begin{itemize}
+    \item So far, the function information is \alert{series coefficients}
+    \begin{itemize}
+	\setbeamertemplate{itemize items}[triangle]
+        \item Hard to know a priori how large $R$ should be for your problem
+        \item Computational cost depends on $R$, but not on $f$ data
+    \end{itemize}
+    
+    \item Choosing $\ch = $ \smallcone makes adaptive algorithms possible\footfullcite{HicEtal17a,KunEtal19a,DinHic20a,RatHic19a}
+
+\end{itemize}
+\end{frame}
+
+    
+\end{frame}
 
 
 
@@ -455,14 +479,14 @@ Sine and Cosine \tabularnewline
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Examples}
+\section{Example}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}{Cheng and Sandu Function\footfullcite{VirLib17a}}
+\begin{frame}{Cheng and Sandu Function\footfullcite{DinEtal20a,VirLib17a}}
     \vspace{-9ex}
     \begin{gather*}
-        \text{Chebyshev polynomials}, \qquad \text{Order weights }\Gamma_k = 1, \qquad \text{Coordinate weights } \gamma_\ell \text{ \alert{inferred}}, \\
-        \text{Smoothness weights } s_j \text{ \alert{inferred}}, \qquad \LambdaStd
+        \text{Chebyshev polynomials}, \qquad \text{Coordinate weights } w_\ell \text{ \alert{inferred}}, \qquad
+        \text{Smoothness weights } s_k \text{ \alert{inferred}}
     \end{gather*}
     
     \vspace{-3ex}
@@ -470,6 +494,8 @@ Sine and Cosine \tabularnewline
     \includegraphics[height = 4.3cm]{ProgramsImages/sim_eval_results_chsan10_d6_sflg0ErrN.eps}
     \qquad \includegraphics[height = 4.3cm]{ProgramsImages/sim_eval_results_chsan10_d6_sflg0fErr.eps}
 \end{frame}
+
+
 
 
 \end{document}
