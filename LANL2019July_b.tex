@@ -231,11 +231,11 @@ Function approximation is relatively simple compared to many other continuous nu
 
 \begin{frame}<1>[label = smoothness]{Smoothness Makes Algorithm Less Expensive}
 \vspace{-3ex}
-For \alert{$d = 1$}, let $\{u_1, u_2, \ldots\}$ be an orthogonal (polynomial) basis for $\cf$ and $\cg$
+For \alert{$d = 1$}, let $\{u_0, u_1, \ldots\}$ be an orthogonal (polynomial) basis for $\cf$ and $\cg$
 
 \vspace{-6ex}
 \begin{gather*}
-    \cf := \left \{ f = \sum_{k=0}^\infty \hf(k) u_k  : \norm[\cf]{f} : = \norm[2]{\left(\frac{\hf(k)}{\lambda_k} \right)_{k=0}^\infty } < \infty \right \}, \qquad \lambda_1 \ge  \lambda_2 \ge \cdots > 0 \\
+    \cf := \left \{ f = \sum_{k=0}^\infty \hf(k) u_k  : \norm[\cf]{f} : = \norm[2]{\left(\frac{\hf(k)}{\lambda_k} \right)_{k=0}^\infty } < \infty \right \}, \qquad \lambda_0 \ge  \lambda_1 \ge \cdots > 0 \\
    \cg := \left \{ g = \sum_{k=0}^\infty \hg(k) u_k  : \norm[\cg]{g} : = \norm[2]{\bigl(\hg(k) \bigr)_{k=0}^\infty } < \infty \right \}, \qquad \app(f,n) = \sum_{k=0}^{n-1} \hf(k) u_{k} 
    \uncover<2->{\\
    \norm[\cg]{f - \app(f,n)} 
@@ -248,7 +248,7 @@ For \alert{$d = 1$}, let $\{u_1, u_2, \ldots\}$ be an orthogonal (polynomial) ba
 By choosing $\ch = \cb_R := \{ f \in \cf : \norm[\cf]{f} \le R\}$, we can define our \alert{algorithm}
 \begin{gather*}
     \alg(f,\varepsilon) 
-    = \app(f,n^*)\ \ \&  \ \ n^* = \min\{n : \lambda_{n} \le \varepsilon/R\}, \quad \implies \quad 
+    = \app(f,n^*)\ \ \&  \ \ n^* = \min\{n : \lambda_{n} \le \varepsilon/R\} \quad \implies \quad 
     \norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon \quad \forall f \in \cb_R\\ 
     \lambda_n = \Order(n^{-1/p}) \implies \COST(\cb_R,\varepsilon) = \Order(R^p\varepsilon^{-p})
 \end{gather*}
@@ -316,10 +316,10 @@ For \alert{arbitrary $d$}, let $\{u_0 = 1, u_1\only<4->{\alert{, \ldots}}\}$ be 
     \norm[\cg]{f - \alg(f,\varepsilon)} \le \varepsilon \quad \forall f \in \cb_R\\
     \lambda_{\vk_n} = \Order\bigl(n^{-1/p}\only<1-2>{\me^{s^p\alert{d}/p}}%
     \only<3->{\exp\bigl(p^{-1} \textstyle \only<3>{s^p}
-    \only<4>{\sum_{k=1}^\infty s_k} \sum_{\ell=1}^{\alert{d}} w_\ell^p \bigr)}\bigr) 
+    \only<4>{\sum_{k=1}^\infty s^p_k} \sum_{\ell=1}^{\alert{d}} w_\ell^p \bigr)}\bigr) 
     \implies \COST(\cb_R,\varepsilon) = \Order\bigr(R^p\varepsilon^{-p}\only<1-2>{\me^{s^p\alert{d}}}%
     \only<3->{\exp\bigl(\textstyle \only<3>{s^p}
-    \only<4>{\sum_{k=1}^\infty s_k} \sum_{\ell=1}^{\alert{d}} w_\ell^p \bigr)} \bigl) \quad \forall p \quad \only<1-2>{\alert{\text{exponential growth in $d$}}}
+    \only<4>{\sum_{k=1}^\infty s^p_k} \sum_{\ell=1}^{\alert{d}} w_\ell^p \bigr)} \bigl) \quad \forall p \quad \only<1-2>{\alert{\text{exponential growth in $d$}}}
     \only<3->{\\ \hspace{3cm}\alert<3->{\text{cost is independent of $d$ if coordinate% 
     \only<4->{ and smoothness} weights decay quickly}}}
  }
@@ -358,13 +358,17 @@ Sine and Cosine \tabularnewline
 
 \begin{frame}{Proof that $\lambda_{k_{n+1}} = \Order\bigl(n^{-1/p}\me^{s^p\alert{d}/p}\bigr) \ \forall p > 0$}
 
+\vspace{-6ex}
+
 \begin{align*}
     \lambda_{\vk_{n+1}}^p &\le \frac 1n \bigl( \lambda_{\vk_{1}}^p + \cdots + \lambda_{\vk_{n}}^p \bigr) \qquad \lambda_{\vk_{i}} \text{ are ordered} \\
     \lambda_{\vk_{n+1}} &\le \frac 1{n^{1/p}} \bigl( \lambda_{\vk_{1}}^p + \cdots + \lambda_{\vk_{n}}^p \bigr)^{1/p} \qquad p^{\text{th}} \text{ root} \\
      &\le \frac 1{n^{1/p}} \bigl( \lambda_{\vk_{1}}^p + \cdots + \lambda_{\vk_{2^d}}^p \bigr)^{1/p} \qquad  \text{add the rest in} \\
      &\le \frac 1{n^{1/p}} \bigl( 1 + s^p \bigr)^{\alert{d}/p} \qquad  \text{binomial theorem} \\
-     & \le \frac {\me^{s^pd/p}}{n^{1/p}} \qquad 1 + x \le \me^x \text{ for } x \ge 0
+     & \le \frac {\me^{s^p\alert{d}/p}}{n^{1/p}} \qquad 1 + x \le \me^x \text{ for } x \ge 0
 \end{align*}
+
+There is a similar proof that provides a \alert{lower bound} on $\lambda_{\vk_{n+1}}$
     
 \end{frame}
 
