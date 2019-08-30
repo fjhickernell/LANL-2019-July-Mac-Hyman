@@ -211,12 +211,12 @@ Function approximation is relatively simple compared to many other continuous nu
     
     \item Choose \alert{nonzero fooling function} $f \in \cf$, such that $L_1(f) = \cdots = L_n(f) = 0$
     
-    \item $\alg(\pm cf,\varepsilon) = 0$ for all $c > 0$
+    \item $\alg(\pm cf,\varepsilon) = \alg(0,\varepsilon)$ for all $c > 0$
     
     \item For all $c > 0$
     \begin{align*}
-        \varepsilon & \ge \max\bigl(\norm[\cg]{cf - \alg(-cf,\varepsilon)}, \norm[\cg]{-cf - \alg(cf,\varepsilon)} \bigr) \\
-        & \ge \frac 12 \bigl(\norm[\cg]{cf - \alg(-cf,\varepsilon)} + \norm[\cg]{cf + \alg(cf,\varepsilon)} \bigr) \\
+        \varepsilon & \ge \max\bigl(\norm[\cg]{cf - \alg(cf,\varepsilon)}, \norm[\cg]{-cf - \alg(-cf,\varepsilon)} \bigr) \\
+        & \ge \frac 12 \bigl(\norm[\cg]{cf - \alg(cf,\varepsilon)} + \norm[\cg]{-cf - \alg(-cf,\varepsilon)} \bigr) \\
         & \ge \frac 12 \bigl(\norm[\cg]{cf - \alg(0,\varepsilon)} + \norm[\cg]{cf + \alg(0,\varepsilon)} \bigr) \\
         & \ge  c \norm[\cg]{f} \qquad \contradiction
     \end{align*}
